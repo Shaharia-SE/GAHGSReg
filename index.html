@@ -3707,9 +3707,8 @@ function renderReport(rows) {
     let photoHtml = "";
     if (photoUrl) {
       photoHtml = `
-        <img src="${photoUrl}" class="photo-thumb" alt="Photo" loading="lazy"
-             onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<span style=\\'color:#b0b8c8;font-size:11px;display:block;\\'>No Preview</span>');">
-        <a href="${photoViewUrl}" target="_blank" rel="noopener" class="photo-link">
+      
+             <a href="${photoViewUrl}" target="_blank" rel="noopener" class="photo-link">
           <i class="fa-regular fa-eye"></i> View
         </a>
       `;
