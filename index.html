@@ -35,6 +35,9 @@
     <link rel="stylesheet"
           href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
+    <!-- SheetJS (Excel export জন্য) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
 <style>
 
 * {
@@ -2847,9 +2850,9 @@ footer {
                     placeholder="🔍 Search by Name, Phone, ID..."
                     onkeyup="filterReport()">
 
-                <button class="btn-print" onclick="window.print()">
-                    <i class="fa-solid fa-print"></i>
-                    Print / PDF
+                <button class="btn-print" onclick="exportToExcel()">
+                    <i class="fa-solid fa-file-excel"></i>
+                    Excel Download
                 </button>
 
                 <button class="btn-refresh" onclick="loadReport()">
@@ -2922,11 +2925,11 @@ footer {
 
         </div>
 
-        <div class="report-actions">
+        <!-- <div class="report-actions">
 
-            <button class="btn-print" onclick="window.print()">
-                <i class="fa-solid fa-print"></i>
-                Print Report
+            <button class="btn-print" onclick="exportToExcel()">
+                <i class="fa-solid fa-file-excel"></i>
+                Excel Download
             </button>
 
             <button class="btn-refresh" onclick="loadReport()">
@@ -2934,7 +2937,7 @@ footer {
                 Refresh Data
             </button>
 
-        </div>
+        </div> -->
 
     </div>
 
@@ -3578,6 +3581,8 @@ window.addEventListener("scroll", function() {
    =====================================================
    ===================================================== */
 
+let currentReportData = [];
+
 async function loadReport() {
   
   const loading = document.getElementById("reportLoading");
@@ -3603,6 +3608,7 @@ async function loadReport() {
     
     if (data.success && data.data && data.data.length > 0) {
       
+      currentReportData = data.data;
       renderReport(data.data);
       
       // Update stats
@@ -3621,6 +3627,8 @@ async function loadReport() {
       document.getElementById("typeCount").textContent = types.size;
       
     } else {
+      
+      currentReportData = [];
       
       body.innerHTML = `
         <tr>
@@ -3707,8 +3715,8 @@ function renderReport(rows) {
     let photoHtml = "";
     if (photoUrl) {
       photoHtml = `
-      
-             <a href="${photoViewUrl}" target="_blank" rel="noopener" class="photo-link">
+        
+        <a href="${photoViewUrl}" target="_blank" rel="noopener" class="photo-link">
           <i class="fa-regular fa-eye"></i> View
         </a>
       `;
@@ -3757,6 +3765,83 @@ function filterReport() {
     }
   });
   
+}
+
+/* =====================================================
+   EXPORT TO EXCEL
+===================================================== */
+
+function exportToExcel() {
+
+  if (!currentReportData || currentReportData.length === 0) {
+    alert("ডাউনলোড করার জন্য কোনো registration data নেই। আগে Refresh করুন।");
+    return;
+  }
+
+  // শুধু visible (search filter এর পর যেগুলো দেখা যাচ্ছে) row গুলো export হবে
+  const searchValue = document.getElementById("reportSearch").value.toLowerCase().trim();
+
+  const filteredData = currentReportData.filter(row => {
+    if (searchValue === "") return true;
+    const combined = [
+      row.registrationId, row.name, row.phone, row.email,
+      row.participantType, row.batch, row.profession,
+      row.address, row.message
+    ].join(" ").toLowerCase();
+    return combined.includes(searchValue);
+  });
+
+  if (filteredData.length === 0) {
+    alert("কোনো ডেটা পাওয়া যায়নি export করার জন্য।");
+    return;
+  }
+
+  // Excel এর জন্য rows তৈরি
+  const excelRows = filteredData.map((row, index) => ({
+    "#": index + 1,
+    "Reg ID": row.registrationId || "",
+    "Name": row.name || "",
+    "Phone": row.phone || "",
+    "Email": row.email || "",
+    "Type": row.participantType || "",
+    "Batch": row.batch || "",
+    "Profession": row.profession || "",
+    "Address": row.address || "",
+    "Message": row.message || "",
+    "Photo Link": row.photoView || row.photo || "",
+    "Submitted": row.timestamp ? new Date(row.timestamp).toLocaleString() : ""
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(excelRows);
+
+  // Column width গুলো একটু ভালো দেখানোর জন্য
+  worksheet["!cols"] = [
+    { wch: 5 },   // #
+    { wch: 16 },  // Reg ID
+    { wch: 20 },  // Name
+    { wch: 15 },  // Phone
+    { wch: 24 },  // Email
+    { wch: 20 },  // Type
+    { wch: 12 },  // Batch
+    { wch: 16 },  // Profession
+    { wch: 30 },  // Address
+    { wch: 30 },  // Message
+    { wch: 40 },  // Photo Link
+    { wch: 20 }   // Submitted
+  ];
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Registrations");
+
+  const now = new Date();
+  const dateStr = now.getFullYear() + "-" +
+    String(now.getMonth() + 1).padStart(2, "0") + "-" +
+    String(now.getDate()).padStart(2, "0");
+
+  const fileName = "AHGS_Golden_Jubilee_Registrations_" + dateStr + ".xlsx";
+
+  XLSX.writeFile(workbook, fileName);
+
 }
 
 /* =====================================================
