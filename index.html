@@ -1468,6 +1468,39 @@ footer {
 
 
 /* =========================
+   PHOTO UPLOAD
+========================= */
+.photo-preview-wrap {
+    display: none;
+    margin-top: 10px;
+    text-align: center;
+}
+
+.photo-preview-wrap.show {
+    display: block;
+}
+
+.photo-preview {
+    width: 90px;
+    height: 110px;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 2px solid var(--gold);
+    background: #f5f7fb;
+}
+
+.photo-help {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 5px;
+}
+
+.form-group input[type="file"] {
+    padding: 9px 10px;
+    cursor: pointer;
+}
+
+/* =========================
    SUCCESS ANIMATION
 ========================= */
 
@@ -2209,6 +2242,31 @@ footer {
                     </div>
 
 
+                    <!-- PHOTO -->
+                    <div class="form-group">
+                        <label>
+                            ছবি
+                            <span class="required">*</span>
+                        </label>
+
+                        <input
+                            type="file"
+                            id="photo"
+                            accept="image/jpeg,image/png,image/webp"
+                            required>
+
+                        <div class="photo-preview-wrap" id="photoPreviewWrap">
+                            <img
+                                id="photoPreview"
+                                class="photo-preview"
+                                alt="ছবির Preview">
+                            <div class="photo-help">ছবির Preview</div>
+                        </div>
+
+                        <div class="photo-help">JPG, PNG বা WEBP • সর্বোচ্চ 5MB</div>
+                    </div>
+
+
                     <!-- EMAIL + TYPE -->
 
                     <div class="form-row">
@@ -2728,7 +2786,7 @@ footer {
    ⚠️ এখানে আপনার সঠিক URL বসান
 ===================================================== */
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxJ1shLXMykFr7Yo68YEdLvQa6KQGojUV9T70_d4LNaBt3I39HrDoL0xMddy5iajnsI/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJkkELN8c0EkTzCsddOVdPsgr_ecRhxQFZ3kfvBLP6fISO4Vi2SZXWBzdWelz5AzqRyQ/exec";
 
 /* =====================================================
    MOBILE MENU
@@ -2758,6 +2816,9 @@ const successModal = document.getElementById("successModal");
 const registrationNumber = document.getElementById("registrationNumber");
 const submitButton = document.getElementById("submitButton");
 const formError = document.getElementById("formError");
+const photoInput = document.getElementById("photo");
+const photoPreview = document.getElementById("photoPreview");
+const photoPreviewWrap = document.getElementById("photoPreviewWrap");
 
 /* =====================================================
    CREATE REGISTRATION ID
@@ -2837,10 +2898,83 @@ function testConnection() {
 setTimeout(testConnection, 1000);
 
 /* =====================================================
+   PHOTO PREVIEW + IMAGE COMPRESSION
+===================================================== */
+photoInput.addEventListener("change", function() {
+  const file = this.files && this.files[0];
+
+  if (!file) {
+    photoPreviewWrap.classList.remove("show");
+    return;
+  }
+
+  if (!file.type.startsWith("image/")) {
+    this.value = "";
+    photoPreviewWrap.classList.remove("show");
+    showError("দয়া করে JPG, PNG বা WEBP ছবি নির্বাচন করুন।");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    this.value = "";
+    photoPreviewWrap.classList.remove("show");
+    showError("ছবির size সর্বোচ্চ 5MB হতে হবে।");
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    photoPreview.src = e.target.result;
+    photoPreviewWrap.classList.add("show");
+  };
+  reader.readAsDataURL(file);
+});
+
+function compressImage(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+      const img = new Image();
+
+      img.onload = function() {
+        const maxSize = 1000;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > maxSize || height > maxSize) {
+          const scale = Math.min(maxSize / width, maxSize / height);
+          width = Math.round(width * scale);
+          height = Math.round(height * scale);
+        }
+
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+
+        const ctx = canvas.getContext("2d");
+        ctx.fillStyle = "#ffffff";
+        ctx.fillRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+
+        const dataUrl = canvas.toDataURL("image/jpeg", 0.78);
+        resolve(dataUrl);
+      };
+
+      img.onerror = () => reject(new Error("ছবিটি পড়া যায়নি।"));
+      img.src = event.target.result;
+    };
+
+    reader.onerror = () => reject(new Error("ছবি পড়া যায়নি।"));
+    reader.readAsDataURL(file);
+  });
+}
+
+/* =====================================================
    SUBMIT FORM - UPDATED VERSION
 ===================================================== */
 
-registrationForm.addEventListener("submit", function(event) {
+registrationForm.addEventListener("submit", async function(event) {
   event.preventDefault();
   hideError();
 
@@ -2854,6 +2988,7 @@ registrationForm.addEventListener("submit", function(event) {
   const address = document.getElementById("address").value.trim();
   const message = document.getElementById("message").value.trim();
   const confirmCheck = document.getElementById("confirm");
+  const photoFile = photoInput.files && photoInput.files[0];
 
   // Validation
   if (!name) {
@@ -2868,6 +3003,10 @@ registrationForm.addEventListener("submit", function(event) {
     showError("দয়া করে অংশগ্রহণের ধরন নির্বাচন করুন।");
     return;
   }
+  if (!photoFile) {
+    showError("দয়া করে আপনার ছবি নির্বাচন করুন।");
+    return;
+  }
   if (!confirmCheck.checked) {
     showError("অনুগ্রহ করে নিশ্চিত করুন যে আপনার তথ্য সঠিক।");
     return;
@@ -2878,6 +3017,15 @@ registrationForm.addEventListener("submit", function(event) {
   const phonePattern = /^(01[3-9]\d{8}|\+8801[3-9]\d{8})$/;
   if (!phonePattern.test(cleanPhone)) {
     showError("দয়া করে সঠিক মোবাইল নম্বর দিন। যেমন: 017XXXXXXXX");
+    return;
+  }
+
+  // Compress photo before sending to Google Apps Script
+  let photoData = "";
+  try {
+    photoData = await compressImage(photoFile);
+  } catch (error) {
+    showError("ছবি প্রস্তুত করা সম্ভব হয়নি। আবার চেষ্টা করুন।");
     return;
   }
 
@@ -2899,6 +3047,8 @@ registrationForm.addEventListener("submit", function(event) {
   formData.append("profession", profession);
   formData.append("address", address);
   formData.append("message", message);
+  formData.append("photoData", photoData);
+  formData.append("photoName", photoFile.name);
 
   console.log("Sending to:", GOOGLE_SCRIPT_URL);
   console.log("Data:", formData.toString());
@@ -2923,7 +3073,14 @@ registrationForm.addEventListener("submit", function(event) {
     console.log("Server response:", data);
     
     if (data.success) {
+      // ফর্ম রিসেট
       registrationForm.reset();
+      
+      // ছবির প্রিভিউ ক্লিয়ার
+      photoInput.value = '';
+      photoPreviewWrap.classList.remove('show');
+      photoPreview.src = '';
+
       registrationNumber.innerText = data.registrationId || registrationId;
       successModal.classList.add("show");
     } else {
