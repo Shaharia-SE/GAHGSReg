@@ -217,6 +217,19 @@ a {
     font-weight: 800 !important;
 }
 
+.nav-report {
+    color: var(--navy) !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #6dd5ed,
+            #2193b0
+        ) !important;
+
+    font-weight: 800 !important;
+}
+
 .menu-btn {
     display: none;
 
@@ -1043,6 +1056,225 @@ section {
 
 
 /* =========================
+   REPORT
+========================= */
+
+.report-page {
+    background: #f0f2f8;
+    min-height: 100vh;
+    padding: 30px 0;
+}
+
+.report-header {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    margin-bottom: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.report-header-left h1 {
+    font-family: "Playfair Display", serif;
+    color: var(--navy);
+    font-size: 28px;
+}
+
+.report-header-left p {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.report-header-right {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.report-search {
+    padding: 10px 15px;
+    border: 1px solid #dfe4ec;
+    border-radius: 10px;
+    font-size: 13px;
+    min-width: 200px;
+    background: #fcfdff;
+}
+
+.report-search:focus {
+    border-color: var(--gold);
+    outline: none;
+}
+
+.report-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 25px;
+}
+
+.stat-card {
+    background: white;
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+}
+
+.stat-card .number {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--navy);
+}
+
+.stat-card .label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.stat-card.gold .number {
+    color: var(--gold-dark);
+}
+
+.report-table-wrap {
+    background: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+    overflow-x: auto;
+}
+
+.report-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.report-table thead {
+    background: var(--navy);
+    color: white;
+}
+
+.report-table th {
+    padding: 12px 14px;
+    text-align: left;
+    white-space: nowrap;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.report-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #f0f2f8;
+    vertical-align: middle;
+}
+
+.report-table tbody tr:hover {
+    background: #f8faff;
+}
+
+.report-table .photo-thumb {
+    width: 45px;
+    height: 55px;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 2px solid var(--gold);
+    background: #f5f7fb;
+    display: block;
+}
+
+.report-table .photo-link {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--gold-dark);
+    font-weight: 600;
+}
+
+.report-table .photo-link:hover {
+    text-decoration: underline;
+}
+
+.report-table .no-data {
+    text-align: center;
+    padding: 50px 20px;
+    color: #8f9db2;
+}
+
+.report-table .no-data i {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 15px;
+    color: #d0d7e3;
+}
+
+.report-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.btn-print {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    background: var(--navy);
+    color: white;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-print:hover {
+    background: #0d2147;
+}
+
+.btn-refresh {
+    padding: 12px 25px;
+    border: 1px solid #dfe4ec;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    background: white;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-refresh:hover {
+    background: #f5f7fb;
+}
+
+/* Report Loading */
+.report-loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--muted);
+}
+
+.report-loading i {
+    font-size: 40px;
+    color: var(--gold);
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* =========================
    FOOTER
 ========================= */
 
@@ -1306,6 +1538,25 @@ footer {
         grid-template-columns:
             1fr 1fr;
     }
+
+    .report-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .report-header-right {
+        flex-direction: column;
+    }
+
+    .report-search {
+        min-width: auto;
+    }
+
+    .report-table th,
+    .report-table td {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
 }
 
 
@@ -1463,6 +1714,29 @@ footer {
         grid-template-columns: 1fr;
 
         gap: 30px;
+    }
+
+    .report-header-left h1 {
+        font-size: 22px;
+    }
+
+    .report-table-wrap {
+        padding: 10px;
+    }
+
+    .report-table th,
+    .report-table td {
+        padding: 6px 8px;
+        font-size: 11px;
+    }
+
+    .report-table .photo-thumb {
+        width: 35px;
+        height: 45px;
+    }
+
+    .report-stats {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -1631,6 +1905,19 @@ footer {
 
                 </li>
 
+                <li>
+
+                    <a href="#report"
+                       class="nav-report">
+
+                        <i class="fa-solid fa-chart-simple"></i>
+
+                        Report
+
+                    </a>
+
+                </li>
+
             </ul>
 
         </nav>
@@ -1675,7 +1962,7 @@ footer {
 
             <div class="hero-subtitle">
 
-                সুবর্ণজয়ন্তী উদযাপন ২০২৬
+                সুবর্ণজয়ন্তী উদযাপন ২০২৬
 
             </div>
 
@@ -1683,8 +1970,8 @@ footer {
             <p class="hero-description">
 
                 পাঁচ দশকের গৌরব, শিক্ষা, ঐতিহ্য ও
-                অসংখ্য স্মৃতিকে সঙ্গে নিয়ে উদযাপিত হতে
-                যাচ্ছে আমাদের প্রিয় প্রতিষ্ঠানের
+                অসংখ্য স্মৃতিকে সঙ্গে নিয়ে উদযাপিত হতে
+                যাচ্ছে আমাদের প্রিয় প্রতিষ্ঠানের
                 ৫০ বছর পূর্তি।
 
             </p>
@@ -1794,8 +2081,8 @@ footer {
                 </p>
 
                 <p>
-                    সুবর্ণজয়ন্তী উপলক্ষে আমরা ফিরে দেখতে চাই
-                    আমাদের পুরোনো দিনগুলো, প্রিয় শিক্ষক-শিক্ষিকা,
+                    সুবর্ণজয়ন্তী উপলক্ষে আমরা ফিরে দেখতে চাই
+                    আমাদের পুরোনো দিনগুলো, প্রিয় শিক্ষক-শিক্ষিকা,
                     সহপাঠী এবং অমূল্য স্মৃতিগুলো।
                 </p>
 
@@ -1846,7 +2133,7 @@ footer {
             </span>
 
             <h2>
-                সুবর্ণজয়ন্তী অনুষ্ঠান
+                সুবর্ণজয়ন্তী অনুষ্ঠান
             </h2>
 
             <p>
@@ -1939,8 +2226,8 @@ footer {
                 </h3>
 
                 <p>
-                    পুরোনো ছবি, স্মৃতি ও গল্প নিয়ে
-                    থাকছে বিশেষ আয়োজন।
+                    পুরোনো ছবি, স্মৃতি ও গল্প নিয়ে
+                    থাকছে বিশেষ আয়োজন।
                 </p>
 
             </div>
@@ -1986,7 +2273,7 @@ footer {
             </h2>
 
             <p>
-                চূড়ান্ত সময়সূচি পরবর্তীতে আপডেট করা হবে।
+                চূড়ান্ত সময়সূচি পরবর্তীতে আপডেট করা হবে।
             </p>
 
         </div>
@@ -2028,7 +2315,7 @@ footer {
                     </h3>
 
                     <p>
-                        উদ্বোধনী বক্তব্য ও বিশেষ আয়োজন।
+                        উদ্বোধনী বক্তব্য ও বিশেষ আয়োজন।
                     </p>
 
                 </div>
@@ -2118,7 +2405,7 @@ footer {
             </span>
 
             <h2>
-                সুবর্ণজয়ন্তী রেজিস্ট্রেশন
+                সুবর্ণজয়ন্তী রেজিস্ট্রেশন
             </h2>
 
             <p>
@@ -2140,8 +2427,8 @@ footer {
                 </h3>
 
                 <p>
-                    আমাদের প্রিয় স্কুলের ৫০ বছরের
-                    গৌরবময় যাত্রার এই ঐতিহাসিক আয়োজনে
+                    আমাদের প্রিয় স্কুলের ৫০ বছরের
+                    গৌরবময় যাত্রার এই ঐতিহাসিক আয়োজনে
                     আপনিও অংশ নিন।
                 </p>
 
@@ -2410,7 +2697,7 @@ footer {
                             required>
 
                         <span>
-                            আমি নিশ্চিত করছি যে উপরে দেওয়া
+                            আমি নিশ্চিত করছি যে উপরে দেওয়া
                             তথ্যগুলো সঠিক এবং আমি Golden Jubilee
                             অনুষ্ঠানে অংশগ্রহণ করতে আগ্রহী।
                         </span>
@@ -2519,6 +2806,133 @@ footer {
                     alt="School">
 
             </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- ============================================================ -->
+<!-- REPORT SECTION -->
+<!-- ============================================================ -->
+
+<section class="report-page" id="report">
+
+    <div class="container">
+
+        <!-- Report Header -->
+        <div class="report-header">
+
+            <div class="report-header-left">
+
+                <h1>
+                    <i class="fa-solid fa-chart-simple" style="color: var(--gold-dark);"></i>
+                    Registration Report
+                </h1>
+
+                <p>
+                    Abdul Hamid Girls School — Golden Jubilee 2026
+                </p>
+
+            </div>
+
+            <div class="report-header-right">
+
+                <input
+                    type="text"
+                    class="report-search"
+                    id="reportSearch"
+                    placeholder="🔍 Search by Name, Phone, ID..."
+                    onkeyup="filterReport()">
+
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i>
+                    Print / PDF
+                </button>
+
+                <button class="btn-refresh" onclick="loadReport()">
+                    <i class="fa-solid fa-rotate"></i>
+                    Refresh
+                </button>
+
+            </div>
+
+        </div>
+
+        <!-- Stats -->
+        <div class="report-stats" id="reportStats">
+
+            <div class="stat-card gold">
+                <div class="number" id="totalCount">0</div>
+                <div class="label">Total Registrations</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="number" id="todayCount">0</div>
+                <div class="label">Today's Registrations</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="number" id="typeCount">0</div>
+                <div class="label">Participant Types</div>
+            </div>
+
+        </div>
+
+        <!-- Table -->
+        <div class="report-table-wrap">
+
+            <div id="reportLoading" class="report-loading">
+                <i class="fa-solid fa-spinner"></i>
+                <p>Loading report data...</p>
+            </div>
+
+            <div id="reportContent" style="display: none;">
+
+                <table class="report-table" id="reportTable">
+
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Reg ID</th>
+                            <th>Name</th>
+                            <th>Phone</th>
+                            <th>Email</th>
+                            <th>Type</th>
+                            <th>Batch</th>
+                            <th>Profession</th>
+                            <th>Address</th>
+                            <th>Message</th>
+                            <th>Photo</th>
+                            <th>Submitted</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="reportBody">
+
+                        <!-- Data will be loaded here -->
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+        <div class="report-actions">
+
+            <button class="btn-print" onclick="window.print()">
+                <i class="fa-solid fa-print"></i>
+                Print Report
+            </button>
+
+            <button class="btn-refresh" onclick="loadReport()">
+                <i class="fa-solid fa-rotate"></i>
+                Refresh Data
+            </button>
 
         </div>
 
@@ -2645,7 +3059,7 @@ footer {
 
 
                 <p>
-                    পাঁচ দশকের গৌরবময় শিক্ষা ও
+                    পাঁচ দশকের গৌরবময় শিক্ষা ও
                     ঐতিহ্যকে স্মরণ করে
                     Golden Jubilee Celebration 2026।
                 </p>
@@ -2682,6 +3096,12 @@ footer {
                     <li>
                         <a href="#registration">
                             Registration
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="#report">
+                            Report
                         </a>
                     </li>
 
@@ -2754,7 +3174,7 @@ footer {
 
 
         <p>
-            আপনার রেজিস্ট্রেশন সফলভাবে সম্পন্ন হয়েছে।
+            আপনার রেজিস্ট্রেশন সফলভাবে সম্পন্ন হয়েছে।
         </p>
 
 
@@ -2783,10 +3203,10 @@ footer {
 <script>
 /* =====================================================
    GOOGLE APPS SCRIPT WEB APP URL
-   ⚠️ এখানে আপনার সঠিক URL বসান
+   ⚠️ শুধুমাত্র BASE URL দিন, ?action=getData যোগ করবেন না
 ===================================================== */
 
-const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyJkkELN8c0EkTzCsddOVdPsgr_ecRhxQFZ3kfvBLP6fISO4Vi2SZXWBzdWelz5AzqRyQ/exec";
+const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbx5PmiwvoHYGcPQi_jWMXPHI-HYlwFw-tDfr6OJREt8mLxP5vc4h9Vp-k19K6KDOUko2A/exec";
 
 /* =====================================================
    MOBILE MENU
@@ -2911,7 +3331,7 @@ photoInput.addEventListener("change", function() {
   if (!file.type.startsWith("image/")) {
     this.value = "";
     photoPreviewWrap.classList.remove("show");
-    showError("দয়া করে JPG, PNG বা WEBP ছবি নির্বাচন করুন।");
+    showError("দয়া করে JPG, PNG বা WEBP ছবি নির্বাচন করুন।");
     return;
   }
 
@@ -2961,17 +3381,17 @@ function compressImage(file) {
         resolve(dataUrl);
       };
 
-      img.onerror = () => reject(new Error("ছবিটি পড়া যায়নি।"));
+      img.onerror = () => reject(new Error("ছবিটি পড়া যায়নি।"));
       img.src = event.target.result;
     };
 
-    reader.onerror = () => reject(new Error("ছবি পড়া যায়নি।"));
+    reader.onerror = () => reject(new Error("ছবি পড়া যায়নি।"));
     reader.readAsDataURL(file);
   });
 }
 
 /* =====================================================
-   SUBMIT FORM - UPDATED VERSION
+   SUBMIT FORM
 ===================================================== */
 
 registrationForm.addEventListener("submit", async function(event) {
@@ -2992,19 +3412,19 @@ registrationForm.addEventListener("submit", async function(event) {
 
   // Validation
   if (!name) {
-    showError("দয়া করে আপনার পূর্ণ নাম লিখুন।");
+    showError("দয়া করে আপনার পূর্ণ নাম লিখুন।");
     return;
   }
   if (!phone) {
-    showError("দয়া করে আপনার মোবাইল নম্বর লিখুন।");
+    showError("দয়া করে আপনার মোবাইল নম্বর লিখুন।");
     return;
   }
   if (!participantType) {
-    showError("দয়া করে অংশগ্রহণের ধরন নির্বাচন করুন।");
+    showError("দয়া করে অংশগ্রহণের ধরন নির্বাচন করুন।");
     return;
   }
   if (!photoFile) {
-    showError("দয়া করে আপনার ছবি নির্বাচন করুন।");
+    showError("দয়া করে আপনার ছবি নির্বাচন করুন।");
     return;
   }
   if (!confirmCheck.checked) {
@@ -3016,7 +3436,7 @@ registrationForm.addEventListener("submit", async function(event) {
   const cleanPhone = phone.replace(/[\s-]/g, "");
   const phonePattern = /^(01[3-9]\d{8}|\+8801[3-9]\d{8})$/;
   if (!phonePattern.test(cleanPhone)) {
-    showError("দয়া করে সঠিক মোবাইল নম্বর দিন। যেমন: 017XXXXXXXX");
+    showError("দয়া করে সঠিক মোবাইল নম্বর দিন। যেমন: 017XXXXXXXX");
     return;
   }
 
@@ -3025,7 +3445,7 @@ registrationForm.addEventListener("submit", async function(event) {
   try {
     photoData = await compressImage(photoFile);
   } catch (error) {
-    showError("ছবি প্রস্তুত করা সম্ভব হয়নি। আবার চেষ্টা করুন।");
+    showError("ছবি প্রস্তুত করা সম্ভব হয়নি। আবার চেষ্টা করুন।");
     return;
   }
 
@@ -3083,13 +3503,16 @@ registrationForm.addEventListener("submit", async function(event) {
 
       registrationNumber.innerText = data.registrationId || registrationId;
       successModal.classList.add("show");
+      
+      // রিপোর্ট রিফ্রেশ করুন
+      loadReport();
     } else {
       showError(data.message || "Registration failed. Please try again.");
     }
   })
   .catch(function(error) {
     console.error("Error:", error);
-    showError("❌ Registration Submit করা সম্ভব হয়নি। Error: " + error.message + 
+    showError("❌ Registration Submit করা সম্ভব হয়নি। Error: " + error.message + 
               "\n\n💡 Tips:\n1. Check if the URL is correct\n2. Check internet connection\n3. Try refreshing the page");
   })
   .finally(function() {
@@ -3149,8 +3572,222 @@ window.addEventListener("scroll", function() {
   });
 });
 
+/* =====================================================
+   =====================================================
+   REPORT FUNCTIONALITY
+   =====================================================
+   ===================================================== */
+
+async function loadReport() {
+  
+  const loading = document.getElementById("reportLoading");
+  const content = document.getElementById("reportContent");
+  const body = document.getElementById("reportBody");
+  
+  // Show loading
+  loading.style.display = "block";
+  content.style.display = "none";
+  
+  try {
+    
+    // এখানে ?action=getData যোগ করছি
+    const response = await fetch(GOOGLE_SCRIPT_URL + "?action=getData");
+    
+    if (!response.ok) {
+      throw new Error("Failed to fetch data: " + response.status);
+    }
+    
+    const data = await response.json();
+    
+    console.log("Report Data:", data);
+    
+    if (data.success && data.data && data.data.length > 0) {
+      
+      renderReport(data.data);
+      
+      // Update stats
+      document.getElementById("totalCount").textContent = data.total || data.data.length;
+      
+      // Today's count
+      const today = new Date().toDateString();
+      const todayCount = data.data.filter(row => {
+        const date = new Date(row.timestamp);
+        return date.toDateString() === today;
+      }).length;
+      document.getElementById("todayCount").textContent = todayCount;
+      
+      // Unique types
+      const types = new Set(data.data.map(row => row.participantType).filter(Boolean));
+      document.getElementById("typeCount").textContent = types.size;
+      
+    } else {
+      
+      body.innerHTML = `
+        <tr>
+          <td colspan="12" class="no-data">
+            <i class="fa-solid fa-inbox"></i>
+            No registrations found yet.
+            <br><br>
+            <small>Be the first one to register!</small>
+          </td>
+        </tr>
+      `;
+      
+      document.getElementById("totalCount").textContent = "0";
+      document.getElementById("todayCount").textContent = "0";
+      document.getElementById("typeCount").textContent = "0";
+      
+    }
+    
+  } catch (error) {
+    
+    console.error("Report Error:", error);
+    
+    body.innerHTML = `
+      <tr>
+        <td colspan="12" class="no-data">
+          <i class="fa-solid fa-triangle-exclamation" style="color: #c32b36;"></i>
+          Error loading report data.
+          <br><br>
+          <small>${error.message}</small>
+          <br>
+          <small style="display:block; margin-top:10px;">
+            💡 Make sure Google Apps Script URL is correct and accessible.
+          </small>
+        </td>
+      </tr>
+    `;
+    
+  }
+  
+  // Hide loading, show content
+  loading.style.display = "none";
+  content.style.display = "block";
+  
+}
+
+function renderReport(rows) {
+
+  const body = document.getElementById("reportBody");
+
+  if (!rows || rows.length === 0) {
+    body.innerHTML = `
+      <tr>
+        <td colspan="12" class="no-data">
+          <i class="fa-solid fa-inbox"></i>
+          No registrations found.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  let html = "";
+
+  rows.forEach((row, index) => {
+
+    const serial = index + 1;
+
+    const regId = row.registrationId || "N/A";
+    const name = row.name || "";
+    const phone = row.phone || "";
+    const email = row.email || "";
+    const type = row.participantType || "";
+    const batch = row.batch || "";
+    const profession = row.profession || "";
+    const address = row.address || "";
+    const message = row.message || "";
+    // "photo" = Drive thumbnail endpoint (reliable for <img> embedding)
+    // "photoView" = normal Drive file link (used for the "View" button)
+    const photoUrl = row.photo || "";
+    const photoViewUrl = row.photoView || row.photo || "";
+    const submitted = row.timestamp ? new Date(row.timestamp).toLocaleString() : "";
+
+    // Photo column
+    let photoHtml = "";
+    if (photoUrl) {
+      photoHtml = `
+        <img src="${photoUrl}" class="photo-thumb" alt="Photo" loading="lazy"
+             onerror="this.style.display='none'; this.insertAdjacentHTML('afterend','<span style=\\'color:#b0b8c8;font-size:11px;display:block;\\'>No Preview</span>');">
+        <a href="${photoViewUrl}" target="_blank" rel="noopener" class="photo-link">
+          <i class="fa-regular fa-eye"></i> View
+        </a>
+      `;
+    } else {
+      photoHtml = '<span style="color:#b0b8c8; font-size:11px;">No Photo</span>';
+    }
+
+    html += `
+      <tr>
+        <td>${serial}</td>
+        <td><strong>${regId}</strong></td>
+        <td>${name}</td>
+        <td>${phone}</td>
+        <td>${email}</td>
+        <td>${type}</td>
+        <td>${batch}</td>
+        <td>${profession}</td>
+        <td style="max-width:150px; word-break:break-word;">${address}</td>
+        <td style="max-width:120px; word-break:break-word;">${message}</td>
+        <td>${photoHtml}</td>
+        <td style="font-size:11px;">${submitted}</td>
+      </tr>
+    `;
+
+  });
+
+  body.innerHTML = html;
+
+}
+
+/* =====================================================
+   FILTER REPORT (Search)
+===================================================== */
+
+function filterReport() {
+  
+  const search = document.getElementById("reportSearch").value.toLowerCase().trim();
+  const rows = document.querySelectorAll("#reportBody tr");
+  
+  rows.forEach(row => {
+    const text = row.textContent.toLowerCase();
+    if (search === "" || text.includes(search)) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+  
+}
+
+/* =====================================================
+   LOAD REPORT ON PAGE LOAD
+===================================================== */
+
+// When page loads, load report
+document.addEventListener("DOMContentLoaded", function() {
+  
+  // Check if URL has #report hash
+  if (window.location.hash === "#report") {
+    setTimeout(loadReport, 500);
+  } else {
+    // Load report in background anyway
+    setTimeout(loadReport, 2000);
+  }
+  
+});
+
+// Also load report when user clicks Report menu
+document.querySelectorAll('a[href="#report"]').forEach(link => {
+  link.addEventListener("click", function(e) {
+    setTimeout(loadReport, 300);
+  });
+});
+
 console.log("✅ Registration form loaded");
 console.log("📡 Web App URL:", GOOGLE_SCRIPT_URL);
+console.log("📊 Report feature is ready!");
+
 </script>
 </body>
 </html>
